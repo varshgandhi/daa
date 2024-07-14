@@ -1,0 +1,59 @@
+from collections import defaultdict
+import os
+
+def maximumPeople(p, x, y, r):
+    n = len(p)
+    m = len(y)
+    
+    events = []
+    for i in range(n):
+        events.append((x[i], 'town', p[i]))
+    
+    for j in range(m):
+        events.append((y[j] - r[j], 'cloud_start', j))
+        events.append((y[j] + r[j] + 1, 'cloud_end', j))
+    
+    events.sort()
+    
+    cloud_coverage = defaultdict(int)
+    current_clouds = set()
+    always_sunny_population = 0
+    removal_impact = defaultdict(int)
+    
+    for event in events:
+        if event[1] == 'town':
+            if len(current_clouds) == 0:
+                always_sunny_population += event[2]
+            elif len(current_clouds) == 1:
+                cloud_id = next(iter(current_clouds))
+                removal_impact[cloud_id] += event[2]
+        elif event[1] == 'cloud_start':
+            cloud_coverage[event[2]] = 0
+            current_clouds.add(event[2])
+        elif event[1] == 'cloud_end':
+            current_clouds.remove(event[2])
+    
+    max_sunny_with_removal = max(removal_impact.values(), default=0)
+    
+    return always_sunny_population + max_sunny_with_removal
+
+if __name__ == '__main__':
+    fptr = open(os.environ['OUTPUT_PATH'], 'w')
+
+    n = int(input().strip())
+
+    p = list(map(int, input().rstrip().split()))
+
+    x = list(map(int, input().rstrip().split()))
+
+    m = int(input().strip())
+
+    y = list(map(int, input().rstrip().split()))
+
+    r = list(map(int, input().rstrip().split()))
+
+    result = maximumPeople(p, x, y, r)
+
+    fptr.write(str(result) + '\n')
+
+    fptr.close()
