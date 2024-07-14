@@ -1,0 +1,19 @@
+def quickSort(arr):
+    if len(arr) <= 1:  # Base case for recursion
+        return arr
+    
+    pivot = arr[0]  # The first element is the pivot
+    left = [num for num in arr if num < pivot]
+    equal = [num for num in arr if num == pivot]
+    right = [num for num in arr if num > pivot]
+    
+    # Recursively sort the left and right parts
+    return quickSort(left) + equal + quickSort(right)
+
+# Reading input
+if __name__ == "__main__":
+    n = int(input().strip())  # Read the size of the array
+    arr = list(map(int, input().strip().split()))  # Read the array elements
+    
+    result = quickSort(arr)
+    print(" ".join(map(str, result)))
