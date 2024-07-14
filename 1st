@@ -1,0 +1,28 @@
+def unboundedKnapsack(k, arr):
+    # Initialize a list to store the maximum sum for each possible total from 0 to k
+    dp = [0] * (k + 1)
+    
+    # Iterate over each possible total from 1 to k
+    for i in range(1, k + 1):
+        # For each possible total, check each number in the array
+        for num in arr:
+            if num <= i:
+                # Update dp[i] to the maximum value achievable by including the current number
+                dp[i] = max(dp[i], dp[i - num] + num)
+                
+    # The maximum sum that does not exceed k
+    return dp[k]
+
+# Read the number of test cases
+t = int(input())
+results = []
+
+# Process each test case
+for _ in range(t):
+    n, k = map(int, input().split())
+    arr = list(map(int, input().split()))
+    results.append(unboundedKnapsack(k, arr))
+
+# Print the results for each test case
+for result in results:
+    print(result)
